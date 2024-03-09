@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
-
-	"rsc.io/quote"
+	"github.com/saish24/greetings"
 )
 
 func main() {
-	fmt.Println(quote.Glass())
+	greetings.Hello("BLA BLA BLA")
 }
