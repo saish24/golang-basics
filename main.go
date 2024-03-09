@@ -1,9 +1,15 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/saish24/greetings"
 )
 
 func main() {
-	greetings.Hello("BLA BLA BLA")
+	if str, err := greetings.RandomQuote(); err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(str)
+	}
 }
