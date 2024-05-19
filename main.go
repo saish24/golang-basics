@@ -1,33 +1,44 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"github.com/gin-gonic/gin"
+	"io/ioutil"
+	"net/http"
 )
 
 func main() {
-	ch := make(chan int, 30)
-	go sendInTwoSeconds(ch)
-	go receiveInThreeSeconds(ch)
-	time.Sleep(20 * time.Second)
-	close(ch)
-	for v := range ch {
-		fmt.Println(v)
+	router := gin.Default()
+	setupRoutes(router)
+	if err := router.Run(":8080"); err != nil {
+		panic(err)
 	}
 }
 
-func sendInTwoSeconds(channel chan<- int) {
-	for i := 0; i < 10; i++ {
-		channel <- i
-		fmt.Println("Sending ", i)
-		time.Sleep(1 * time.Second)
-	}
+func setupRoutes(router *gin.Engine) {
+	router.GET("/", func(c *gin.Context) {
+		//c.JSON(200, response{})
+
+		request, err := http.NewRequest(http.MethodGet, "http://yahoo.com", nil)
+		if err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+		response, err := http.DefaultClient.Do(request)
+		if err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+		defer http.DefaultClient.CloseIdleConnections()
+
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+		c.JSON(http.StatusOK, string(body))
+	})
 }
 
-func receiveInThreeSeconds(channel <-chan int) {
-	for i := 0; i < 10; i++ {
-		j := <-channel
-		fmt.Println("Received ", j)
-		time.Sleep(3 * time.Second)
-	}
+type response struct {
+	Message string `json:"message,omitempty"`
 }
