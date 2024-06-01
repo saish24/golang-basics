@@ -1,33 +1,46 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net"
 	"time"
 )
 
 func main() {
-	ch := make(chan int, 30)
-	go sendInTwoSeconds(ch)
-	go receiveInThreeSeconds(ch)
-	time.Sleep(20 * time.Second)
-	close(ch)
-	for v := range ch {
-		fmt.Println(v)
+	listener, err := net.Listen("tcp", ":1729")
+	if err != nil {
+		panic(err)
+	}
+
+	connChan := make(chan struct{}, 3)
+
+	for {
+		log.Println("waiting for client to connect")
+		conn, err := listener.Accept()
+		connChan <- struct{}{}
+		if err != nil {
+			panic(err)
+		}
+		go do(conn, connChan)
 	}
 }
 
-func sendInTwoSeconds(channel chan<- int) {
-	for i := 0; i < 10; i++ {
-		channel <- i
-		fmt.Println("Sending ", i)
-		time.Sleep(1 * time.Second)
+func do(conn net.Conn, connChan <-chan struct{}) {
+	defer func() {
+		conn.Close()
+		log.Println("request completed")
+		<-connChan
+	}()
+	buffer := make([]byte, 1024)
+	_, err := conn.Read(buffer)
+	if err != nil {
+		log.Fatal(err)
 	}
-}
+	log.Println("processing request")
+	time.Sleep(8 * time.Second)
 
-func receiveInThreeSeconds(channel <-chan int) {
-	for i := 0; i < 10; i++ {
-		j := <-channel
-		fmt.Println("Received ", j)
-		time.Sleep(3 * time.Second)
+	_, err = conn.Write([]byte("HTTP/1.1 200 OK\r\n\r\nHello World 🌏\r\n"))
+	if err != nil {
+		log.Fatal(err)
 	}
 }
