@@ -1,33 +1,52 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"time"
+	goredis "github.com/redis/go-redis/v9"
+	"math/rand"
 )
 
+var ctx context.Context
+var redisClient *goredis.Client
+
 func main() {
-	ch := make(chan int, 30)
-	go sendInTwoSeconds(ch)
-	go receiveInThreeSeconds(ch)
-	time.Sleep(20 * time.Second)
-	close(ch)
-	for v := range ch {
-		fmt.Println(v)
+	fmt.Println("Hello World!")
+	ctx = context.Background()
+	initializeRedis()
+
+	setRandomKeys()
+	printRandomKeys()
+}
+
+func initializeRedis() {
+	redisClient = goredis.NewClient(&goredis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	if redisClient == nil {
+		panic("Failed to connect to redis")
 	}
 }
 
-func sendInTwoSeconds(channel chan<- int) {
+func setRandomKeys() {
+
 	for i := 0; i < 10; i++ {
-		channel <- i
-		fmt.Println("Sending ", i)
-		time.Sleep(1 * time.Second)
+		randN := rand.Intn(10)
+		redisClient.Set(ctx, fmt.Sprintf("key_%d", randN), fmt.Sprintf("value_%d", randN), 0)
 	}
 }
 
-func receiveInThreeSeconds(channel <-chan int) {
+func printRandomKeys() {
 	for i := 0; i < 10; i++ {
-		j := <-channel
-		fmt.Println("Received ", j)
-		time.Sleep(3 * time.Second)
+		randN := rand.Intn(10)
+		key := fmt.Sprintf("key_%d", randN)
+		val := redisClient.Get(ctx, key)
+		if val != nil {
+			fmt.Println(fmt.Sprintf("found value: %v", val))
+		} else {
+			fmt.Println(fmt.Sprintf("not found value for key: %v", key))
+		}
 	}
 }
