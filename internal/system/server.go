@@ -1,8 +1,9 @@
 package system
 
 import (
-	"basics/router"
 	"context"
+	"golang-basics/router"
+
 	"github.com/gin-gonic/gin"
 )
 

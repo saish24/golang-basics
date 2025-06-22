@@ -1,9 +1,9 @@
 package service
 
 import (
-	"basics/internal/item/models"
-	"basics/internal/item/repository"
 	"errors"
+	"golang-basics/internal/item/models"
+	"golang-basics/internal/item/repository"
 )
 
 type ItemServiceImpl struct {

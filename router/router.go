@@ -1,7 +1,8 @@
 package router
 
 import (
-	"basics/controller/item"
+	"golang-basics/controller/item"
+
 	"github.com/gin-gonic/gin"
 )
 

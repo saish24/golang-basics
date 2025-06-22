@@ -1,4 +1,4 @@
-module basics
+module golang-basics
 
 go 1.22.3
 

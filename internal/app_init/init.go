@@ -1,7 +1,7 @@
 package app_init
 
 import (
-	"basics/pkg/dynamodb"
+	"golang-basics/pkg/dynamodb"
 	"context"
 	"time"
 )

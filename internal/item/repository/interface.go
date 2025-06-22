@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"basics/internal/item/models"
-	db "basics/pkg/dynamodb"
 	"context"
+	"golang-basics/internal/item/models"
+	db "golang-basics/pkg/dynamodb"
 )
 
 type ItemRepository interface {

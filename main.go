@@ -1,8 +1,8 @@
 package main
 
 import (
-	"basics/internal/app_init"
-	"basics/internal/system"
+	"golang-basics/internal/app_init"
+	"golang-basics/internal/system"
 	"net/http"
 )
 
@@ -16,7 +16,7 @@ func main() {
 	}
 
 	server := http.Server{
-		Addr:    ":8082",
+		Addr:    ":3001",
 		Handler: handler,
 	}
 

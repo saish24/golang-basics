@@ -1,9 +1,10 @@
 package item
 
 import (
-	"basics/internal/item/models"
-	"basics/internal/item/repository"
-	"basics/internal/item/service"
+	"golang-basics/internal/item/models"
+	"golang-basics/internal/item/repository"
+	"golang-basics/internal/item/service"
+
 	"github.com/gin-gonic/gin"
 )
 

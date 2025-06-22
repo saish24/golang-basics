@@ -1,6 +1,6 @@
 package service
 
-import "basics/internal/item/models"
+import "golang-basics/internal/item/models"
 
 type ItemService interface {
 	GetItem(id string) (*models.Item, error)

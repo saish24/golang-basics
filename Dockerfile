@@ -19,4 +19,4 @@ COPY --from=builder /app/go-basic-server .
 
 EXPOSE 8081
 
-CMD ["./basics-go"]
+CMD ["./go-basic-server"]
