@@ -1,10 +1,13 @@
 package service
 
-import "golang-basics/internal/item/models"
+import (
+	"context"
+	"golang-basics/internal/item/models"
+)
 
 type ItemService interface {
-	GetItem(id string) (*models.Item, error)
-	AddItem(item *models.Item) error
-	UpdateItem(item *models.Item) error
-	DeleteItem(id string) error
+	GetItem(ctx context.Context, id string) (*models.Item, error)
+	AddItem(ctx context.Context, item *models.Item) error
+	UpdateItem(ctx context.Context, item *models.Item) error
+	DeleteItem(ctx context.Context, id string) error
 }

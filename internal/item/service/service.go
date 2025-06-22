@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"golang-basics/internal/item/models"
 	"golang-basics/internal/item/repository"
@@ -16,12 +17,12 @@ func NewItemService(repository repository.ItemRepository) ItemService {
 	}
 }
 
-func (i *ItemServiceImpl) GetItem(id string) (*models.Item, error) {
+func (i *ItemServiceImpl) GetItem(ctx context.Context, id string) (*models.Item, error) {
 	if len(id) == 0 {
 		return nil, errors.New("id is required")
 	}
 
-	itemObj, err := i.repository.GetItem(id)
+	itemObj, err := i.repository.GetItem(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -29,14 +30,14 @@ func (i *ItemServiceImpl) GetItem(id string) (*models.Item, error) {
 	return itemObj.ToItem(), nil
 }
 
-func (i *ItemServiceImpl) AddItem(item *models.Item) error {
+func (i *ItemServiceImpl) AddItem(ctx context.Context, item *models.Item) error {
 	return nil
 }
 
-func (i *ItemServiceImpl) UpdateItem(item *models.Item) error {
+func (i *ItemServiceImpl) UpdateItem(ctx context.Context, item *models.Item) error {
 	return nil
 }
 
-func (i *ItemServiceImpl) DeleteItem(id string) error {
+func (i *ItemServiceImpl) DeleteItem(ctx context.Context, id string) error {
 	return nil
 }
