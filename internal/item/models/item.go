@@ -19,6 +19,9 @@ type DBItem struct {
 }
 
 func (I *DBItem) ToItem() *Item {
+	if I == nil {
+		return nil
+	}
 	return &Item{
 		ItemId: I.ItemId,
 		Name:   I.Name,

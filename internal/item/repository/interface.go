@@ -17,7 +17,7 @@ type ItemRepositoryImpl struct {
 	dbClient *db.DatabaseClient
 }
 
-func NewItemRepository() *ItemRepositoryImpl {
+func NewItemRepository() ItemRepository {
 	return &ItemRepositoryImpl{dbClient: db.GetDynamoClient(context.Background())}
 }
 
